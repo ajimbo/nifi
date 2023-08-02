@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nifi:
+    image: nifi-custom
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nifi
+    environment:
+      - SINGLE_USER_CREDENTIALS_USERNAME=admin
+      # password needs to be over 12 characters
+      - SINGLE_USER_CREDENTIALS_PASSWORD=adminadminadmin
+      - NIFI_WEB_PROXY_HOST=10.110.0.30:8443
+      - NIFI_WEB_HTTPS_PORT=8443
+      - NIFI_WEB_HTTPS_HOST=nifi
+    volumes:
+      - ./input:/tmp/input
+      - ./output:/tmp/output
+    ports:
+      - 8443:8443
+# open more ports for listeners or outbound ports
+#      - 8080:8080
+    restart: always
+
+#run -d --name nifi -p 8443:8443 -e SINGLE_USER_CREDENTIALS_USERNAME=admin -e SINGLE_USER_CREDENTIALS_PASSWORD=adminadminadmin -e NIFI_WEB_PROXY_HOST='10.110.0.102:8443'  apache/nifi:latest
